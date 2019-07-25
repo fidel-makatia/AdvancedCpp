@@ -1,0 +1,57 @@
+// reading and writing binary files.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+#pragma pack(push,1)// remove padding
+struct person
+{
+	char name[50];
+	int age;
+	double height;
+
+};
+
+#pragma pack(pop)
+
+
+int main()
+{
+	string filename = "C:/Users/Fidel/Documents/binary.bin";
+	person human = { "Jack", 23,0.67 };// initialize struct
+
+	//write binary file
+		ofstream output;
+		output.open(filename, ios::binary);
+		if (output.is_open())
+		{
+			output.write(reinterpret_cast<char *>(&human), sizeof(person));//cast to char pointer
+			output.close();
+		}
+		else
+		{
+			cout << "could not open file" + filename << endl;
+		}
+
+  //read binary file
+		person second_human;
+		ifstream input;
+		input.open(filename, ios::binary);
+		if (input.is_open())
+		{
+			input.read(reinterpret_cast<char *>(&second_human), sizeof(person));//cast to char pointer
+			input.close();
+		}
+		else
+		{
+			cout << "could not read file" + filename << endl;
+		}
+
+		cout << second_human.name << "," << second_human.age << "," << second_human.height << endl;
+    return 0;
+}
+
